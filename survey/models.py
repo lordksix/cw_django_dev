@@ -28,6 +28,11 @@ class Answer(models.Model):
         HIGH = 4, "Alto"
         VERY_HIGH = 5, "Muy Alto"
 
+    class Like_Values(models.IntegerChoices):
+        NO_ANSWER = 0, "Sin Responder"
+        DISLIKE = 1, "No me gusta"
+        LIKE = 2, "Me gusta"
+
     question = models.ForeignKey(
         Question,
         related_name="answers",
@@ -43,7 +48,11 @@ class Answer(models.Model):
     value = models.PositiveIntegerField(
         "Respuesta", default=0, choices=Answer_Values.choices
     )
-
+    like = models.PositiveIntegerField(
+        "Gusta",
+        default=0,
+        choices=Like_Values.choices,
+    )
     comment = models.TextField("Comentario", default="", blank=True)
 
     def __str__(self) -> str:
