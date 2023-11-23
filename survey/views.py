@@ -1,9 +1,11 @@
 import json
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.urls import reverse
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
@@ -14,10 +16,10 @@ class QuestionListView(ListView):
     model = Question
 
 
-class QuestionCreateView(CreateView):
+class QuestionCreateView(LoginRequiredMixin, CreateView):
     model = Question
     fields = ["title", "description"]
-    redirect_url = ""
+    redirect_url = reverse_lazy("survey:question-list")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -28,10 +30,18 @@ class QuestionCreateView(CreateView):
         return reverse("survey:question-list")
 
 
-class QuestionUpdateView(UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Question
     fields = ["title", "description"]
     template_name = "survey/question_form.html"
+    redirect_url = reverse_lazy("survey:question-list")
+
+    def test_func(self):
+        id = self.kwargs["pk"]
+        question = get_object_or_404(Question, id=id)
+        if self.request.user.id == question.author.id:
+            return True
+        return False
 
     def get_success_url(self):
         return reverse("survey:question-list")
