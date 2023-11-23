@@ -23,11 +23,21 @@
                     <div class="d-flex flex-column col-4">
                         <u class="fw-lighter mb-1">Respuesta</u>
                         <div>
-                            {% for val in '12345' %}
-                                <a class="mx-1 answer {% if question.user_value|slugify == val %}fas{% else %}fal{% endif %} fa-star text-decoration-none"
-                                   data-question="{{ question.pk }}"
-                                   data-value="{{ val }}" href="#"></a>
-                            {% endfor %}
+                            {% if user.is_authenticated %}
+                                {% for val in 6|custom_range %}
+                                    <a class="mx-1 answer auth {% if question|get_answer_user:user.id|add:"0" >= val %}fas{% else %}fal{% endif %} fa-star text-decoration-none"
+                                        data-question="{{ question.pk }}" data-boolean="{{ question|get_answer_user:user.id|add:"0"|is_gte:val }}"
+                                        data-element="answer"
+                                    data-value="{{ val }}" data-user="{{ user.id }}"></a>
+                                {% endfor %}
+                            {% else %}
+                                {% for val in 6|custom_range %}
+                                    <a class="mx-1 answer {% if question|get_answer_user:user.id|add:"0" >= val %}fas{% else %}fal{% endif %} fa-star text-decoration-none"
+                                    data-question="{{ question.pk }}" data-boolean="{{ question|get_answer_user:user.id|add:"0"|is_gte:val }}"
+                                    data-element="answer"
+                                    data-value="{{ val }}" data-user="{{ user.id }}"></a>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-4 d-flex flex-column ">
