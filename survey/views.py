@@ -1,4 +1,8 @@
-from django.http import JsonResponse
+import json
+
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
@@ -46,9 +50,32 @@ def answer_question(request):
 
 
 def like_dislike_question(request):
-    question_pk = request.POST.get("question_pk")
-    if not request.POST.get("question_pk"):
-        return JsonResponse({"ok": False})
-    question = Question.objects.filter(pk=question_pk)[0]
-    # TODO: Dar Like
-    return JsonResponse({"ok": True})
+    if request.method == "POST":
+        if request.POST.get("oper") == "like_submit" and request.is_ajax():
+            question_pk = request.POST.get("question_pk")
+            user_pk = request.POST.get("user_pk")
+            value = 2 if request.POST.get("value") == "like" else 1
+            value = 0 if request.POST.get("boolean") == "True" else value
+            if question_pk is None or user_pk is None:
+                return HttpResponse(
+                    json.dumps({"ok": False}), content_type="application/json"
+                )
+            question = Question.objects.get(id=question_pk)
+            user = get_user_model().objects.get(id=user_pk)
+            answer, created = Answer.objects.update_or_create(
+                author=user, question=question, defaults={"like": value}
+            )
+            ranking = question.ranking
+            return HttpResponse(
+                json.dumps(
+                    {
+                        "ok": True,
+                        "boolean": request.POST.get("boolean"),
+                        "value": request.POST.get("value"),
+                        "question_pk": request.POST.get("question_pk"),
+                        "ranking": ranking,
+                    }
+                ),
+                content_type="application/json",
+            )
+    return redirect("survey:question-list")
