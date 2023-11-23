@@ -1,5 +1,9 @@
+from datetime import datetime, timedelta, timezone
+from typing import List, Union
+
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse
 
 
@@ -14,6 +18,24 @@ class Question(models.Model):
     title = models.CharField("Título", max_length=200)
     description = models.TextField("Descripción")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def ranking(self):
+        answers: Union[QuerySet, List[Answer]] = self.answers.all()
+        rating = 0
+        for answer in answers:
+            if answer.value > 0:
+                rating += 10
+            if answer.like == 2:
+                rating += 5
+            elif answer.like == 1:
+                rating -= 3
+        if datetime.now(timezone.utc) - self.created_at < timedelta(days=1):
+            rating += 10
+        return rating
+
+    def __str__(self) -> str:
+        return f"Pregunta: {self.title.__str__()}"
 
     def get_absolute_url(self):
         return reverse("survey:question-edit", args=[self.pk])
