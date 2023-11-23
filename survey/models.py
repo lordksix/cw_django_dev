@@ -34,6 +34,22 @@ class Question(models.Model):
             rating += 10
         return rating
 
+    def user_like(self, user) -> int:
+        answers: Union[QuerySet, List[Answer]] = self.answers.all()
+        value = False
+        for answer in answers:
+            if answer.author.id == user:
+                value = answer.like == 2
+        return value
+
+    def user_dislike(self, user) -> int:
+        answers: Union[QuerySet, List[Answer]] = self.answers.all()
+        value = False
+        for answer in answers:
+            if answer.author.id == user:
+                value = answer.like == 1
+        return value
+
     def __str__(self) -> str:
         return f"Pregunta: {self.title.__str__()}"
 
