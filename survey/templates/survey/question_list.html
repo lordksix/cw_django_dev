@@ -61,7 +61,40 @@
 
 {% block js %}
     <script>
-
+        $('.like.auth').click(function(){
+            $.ajax({
+                     type: "POST",
+                     url: "{% url 'survey:question-like' %}",
+                     data: {
+                        'question_pk': this.dataset.question,
+                        'user_pk': this.dataset.user,
+                        'value': this.dataset.value,
+                        'boolean': this.dataset.boolean,
+                        'oper':'like_submit',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                     dataType: "json",
+                     success: function(response) {
+                        selector = document.querySelectorAll('a[data-question="' + response.question_pk + '"][data-value="'+ response.value + '"]')[0];
+                        otherSelector = response.value === 'like' ?
+                            document.querySelectorAll('a[data-question="' + response.question_pk + '"][data-value="'+ 'dislike' + '"]')[0] :
+                            otherSelector = document.querySelectorAll('a[data-question="' + response.question_pk + '"][data-value="'+ 'like' + '"]')[0];
+                        delete selector.dataset.boolean
+                        delete otherSelector.dataset.boolean
+                        otherSelector.dataset.boolean = 'False';
+                        if (response.boolean === 'True') {
+                            selector.dataset.boolean = 'False';
+                        }
+                        else selector.dataset.boolean = 'True';
+                        $(selector).toggleClass('fas');
+                        $(selector).toggleClass('fal');
+                        $(otherSelector).removeClass('fas');
+                        $(otherSelector).removeClass('fal');
+                        $(otherSelector).addClass('fal');
+                        document.getElementById(`ranking-${response.question_pk}`).innerText = response.ranking;
+                      }
+                });
+          })
 
     </script>
 
