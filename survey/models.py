@@ -13,7 +13,7 @@ class Question(models.Model):
     )
     title = models.CharField("Título", max_length=200)
     description = models.TextField("Descripción")
-    # TODO: Quisieramos tener un ranking de la pregunta, con likes y dislikes dados por los usuarios.
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def get_absolute_url(self):
         return reverse("survey:question-edit", args=[self.pk])
