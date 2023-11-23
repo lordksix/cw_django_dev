@@ -105,6 +105,36 @@
                         document.getElementById(`ranking-${response.question_pk}`).innerText = response.ranking;
                       }
                 });
+        $('.answer.auth').click(function(){
+            $.ajax({
+                        type: "POST",
+                        url: "{% url 'survey:question-answer' %}",
+                        data: {
+                        'question_pk': this.dataset.question,
+                        'user_pk': this.dataset.user,
+                        'value': this.dataset.value,
+                        'oper':'ans_submit',
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                        dataType: "json",
+                        success: function(response) {
+                        selectors = document.querySelectorAll('a[data-element=answer][data-question="' + response.question_pk + '"]');
+                        selectors.forEach((selector) => {
+                            $(selector).removeClass('fas');
+                            $(selector).removeClass('fal');
+                            delete selector.dataset.boolean
+                            if (selector.dataset.value <= response.value){
+                                selector.dataset.boolean = 'True';
+                                $(selector).addClass('fas');
+                            }
+                            else {
+                                selector.dataset.boolean = 'False';
+                                $(selector).addClass('fal');
+                            }
+                        })
+                        document.getElementById(`ranking-${response.question_pk}`).innerText = response.ranking;
+                        }
+                });
           })
 
     </script>
