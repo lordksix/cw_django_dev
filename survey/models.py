@@ -34,6 +34,14 @@ class Question(models.Model):
             rating += 10
         return rating
 
+    def user_value(self, user) -> int:
+        answers: Union[QuerySet, List[Answer]] = self.answers.all()
+        value = 0
+        for answer in answers:
+            if answer.author.id == user:
+                value = answer.value
+        return value
+
     def user_like(self, user) -> int:
         answers: Union[QuerySet, List[Answer]] = self.answers.all()
         value = False
