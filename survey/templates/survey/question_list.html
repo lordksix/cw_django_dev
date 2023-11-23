@@ -32,10 +32,17 @@
                     <div class="col-4 d-flex flex-column ">
                         <u class="fw-lighter mb-1">Evalúa la pregunta</u>
                         <div>
-                            <a class="mx-1 like {% if question.user_likes %}fas{% else %}fal{% endif %} fa-thumbs-up text-decoration-none"
-                               href="#" data-question="{{ question.pk }}" data-value="like" ></a>
-                            <a class="mx-1 like {% if question.user_dislikes %}fas{% else %}fal{% endif %} fa-thumbs-up fa-flip-both text-decoration-none"
-                               href="#" data-question="{{ question.pk }}" data-value="dislike"></a>
+                            {% if user.is_authenticated %}
+                                <a class="mx-1 like auth {% if question|get_like_user:user.id %}fas{% else %}fal{% endif %} fa-thumbs-up text-decoration-none"
+                                data-question="{{ question.pk }}" data-value="like" data-user="{{ user.id }}" data-boolean="{{ question|get_like_user:user.id }}"></a>
+                                <a class="mx-1 like auth {% if question|get_dislike_user:user.id %}fas{% else %}fal{% endif %} fa-thumbs-up fa-flip-both text-decoration-none"
+                                data-question="{{ question.pk }}" data-value="dislike" data-user="{{ user.id }}" data-boolean="{{ question|get_dislike_user:user.id}}"></a>
+                            {% else %}
+                                <a class="mx-1 like {% if question|get_like_user:user.id %}fas{% else %}fal{% endif %} fa-thumbs-up text-decoration-none"
+                                data-question="{{ question.pk }}" data-value="like" data-user="{{ user.id }}" data-boolean="{{ question|get_like_user:user.id }}"></a>
+                                <a class="mx-1 like {% if question|get_dislike_user:user.id %}fas{% else %}fal{% endif %} fa-thumbs-up fa-flip-both text-decoration-none"
+                                data-question="{{ question.pk }}" data-value="dislike" data-user="{{ user.id }}" data-boolean="{{ question|get_dislike_user:user.id}}"></a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-2">
