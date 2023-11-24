@@ -46,6 +46,7 @@ services:
       - POSTGRES_PORT=5432
       - DJANGO_SECRET_KEY=dj4ng0_sup3r_s3cr3t_k3y
       - DJANGO_DEBUG=1
+      - DJANGO_SETTINGS_MODULE=quizes.settings.development
     depends_on:
       - redis
       - db
