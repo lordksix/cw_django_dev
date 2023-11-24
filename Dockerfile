@@ -19,4 +19,7 @@ COPY . .
 
 ENTRYPOINT ["/code/entrypoint.sh"]
 
+RUN adduser -D myuser
+USER myuser
+
 CMD gunicorn hello_django.wsgi:application --bind 0.0.0.0:$PORT
