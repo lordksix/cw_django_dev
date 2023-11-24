@@ -48,7 +48,7 @@ class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 def answer_question(request):
     if request.method == "POST":
-        if request.POST.get("oper") == "ans_submit" and request.is_ajax():
+        if request.POST.get("oper") == "ans_submit":
             question_pk = request.POST.get("question_pk")
             user_pk = request.POST.get("user_pk")
             value = request.POST.get("value")
@@ -81,7 +81,7 @@ def answer_question(request):
 
 def like_dislike_question(request):
     if request.method == "POST":
-        if request.POST.get("oper") == "like_submit" and request.is_ajax():
+        if request.POST.get("oper") == "like_submit":
             question_pk = request.POST.get("question_pk")
             user_pk = request.POST.get("user_pk")
             value = 2 if request.POST.get("value") == "like" else 1
