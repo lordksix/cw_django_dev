@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   web:
+    container_name: cw_django_prod
     build: .
     restart: always
     command: gunicorn quizes.wsgi:application --bind 0.0.0.0:8000

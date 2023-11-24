@@ -27,3 +27,5 @@ db_from_env = dj_database_url.config(
     default=DATABASE_URL, conn_max_age=500, ssl_require=True
 )
 DATABASES["default"].update(db_from_env)
+
+CSRF_TRUSTED_ORIGINS = ["https://lit-hollows-12137-4ef97bdabd36.herokuapp.com"]
