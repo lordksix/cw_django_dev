@@ -20,4 +20,4 @@ ENTRYPOINT ["/code/entrypoint.sh"]
 
 USER root
 
-CMD gunicorn hello_django.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn quizes.wsgi:application --bind 0.0.0.0:$PORT
