@@ -22,7 +22,10 @@ if DEBUG:
     # If Debug is True, allow all.
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])  # type: ignore
+    ALLOWED_HOSTS = os.environ.get(
+        "DJANGO_ALLOWED_HOSTS",
+        default="localhost,lit-hollows-12137-4ef97bdabd36.herokuapp.com,0.0.0.0",
+    ).split(",")
 
 
 # Application definition
