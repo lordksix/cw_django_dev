@@ -10,6 +10,11 @@ EMAIL_HOST_USER = os.path.join("EMAIL_USER")
 EMAIL_HOST_PASSWORD = os.path.join("EMAIL_PASSWORD")
 EMAIL_USE_TLS = True
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "../", "mediafiles")
+STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "../", "staticfiles")
+
 # Redis Cache
 CACHES = {
     "default": {

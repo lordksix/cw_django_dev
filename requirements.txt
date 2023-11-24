@@ -1,11 +1,12 @@
-asgiref==3.4.1
-Django==3.2.5
+asgiref<4
+Django==4.2.0
 django-environ==0.11.2
 psycopg2>=2.8
 psycopg2-binary==2.9.9
 pytz
 gunicorn==20.1.0
 redis==4.3.4
-celery==5.2.7
+celery==5.2.3
 dj-database-url==0.5.0
+importlib-metadata==4.13.0
 django-redis
