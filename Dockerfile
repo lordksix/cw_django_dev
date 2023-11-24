@@ -15,9 +15,5 @@ COPY ./entrypoint.sh .
 RUN chmod +x /code/entrypoint.sh
 
 COPY . .
-
-ENTRYPOINT ["/code/entrypoint.sh"]
-
 USER root
-
-CMD gunicorn quizes.wsgi:application --bind 0.0.0.0:$PORT
+ENTRYPOINT ["/code/entrypoint.sh"]
